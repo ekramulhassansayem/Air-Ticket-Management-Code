@@ -1,0 +1,287 @@
+#include<stdio.h>
+#include <string.h>
+
+struct book
+{
+    char transit[20];
+    char ttime[20];
+    char time[20];
+    char date[20];
+    char to[20];
+    char from[20];
+    char number[20];
+    char name[20];
+    char pass[20];
+    char mobile[30];
+    int cost;
+}b;
+int seat = 60;
+void insert_details ();//for inserting flight details
+void viewAll ();//for view all data
+void find ();//for finding data
+void book_ticket ();//for booking tickets
+void old_record ();//for user to find easy
+void main()
+{
+    int a,d;
+    printf("\n");
+    printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t AIR TICKET MANAGEMENT SYSTEM");
+    printf("\n");
+    printf("\n=======================================================================================================================");
+    do{
+     printf("\n\n\nYou are a:");
+     printf("\n\t1.User");
+     printf("\n\t2.Client");
+     printf("\nEnter your choice:");
+     scanf("%d",&d);
+     if(d==1)
+      {
+        printf("\n Press<1> Insert Flight Data");
+        printf("\n Press<2> View All Transactions");
+        printf("\n Press<0> Exit");
+        printf("\n\nEnter Your Choice :: ");
+        scanf("%d",&a);
+        if(a==1)
+            insert_details ();
+        else if(a==2)
+           old_record ();
+        else if(a==0)
+            return ;
+        else
+        {
+            printf("\nWrong input!");
+        }
+      }
+     else if(d==2)
+      {
+        printf("\n Press<1> View All Flights");
+        printf("\n Press<2> Book Ticket");
+        printf("\n Press<3> View All Transactions");
+        printf("\n Press<0> Exit");
+        printf("\n\nEnter Your Choice ::\n\n ");
+        scanf("%d",&a);
+        if(a==1)
+           viewAll ();
+        else if(a==2)
+           book_ticket ();
+        else if(a==3)
+           old_record ();
+        else if(a==0)
+            return ;
+        else
+        {
+            printf("\nWrong input!");
+        }
+      }
+    }
+    while(a!=0);
+}
+
+void insert_details()
+{
+    FILE *fp;
+    struct book b;
+    printf("Flight Number: ");
+    scanf("%s",b.number);
+    printf("To: ");
+    scanf("%s",b.to);
+    printf("From: ");
+    scanf("%s",b.from);
+    printf("Enter Date: ");
+    scanf("%s",b.date);
+    printf("Enter Departure Time: ");
+    scanf("%s",b.time);
+    printf("Enter Transit: ");
+    scanf("%s",&b.transit);
+    printf("Enter Transit Time: ");
+    scanf("%s",b.ttime);
+    printf("Enter Ticket Price: ");
+    scanf("%d",&b.cost);
+
+    fp=fopen("data.text","a");
+    if(fp==NULL)
+    {
+        printf("File Not Found");
+    }
+    else
+        {
+            fprintf(fp,"Flight Number: %s\nTo: %s\nFrom: %s\nDate: %s\nDeparture Time: %s\nTransit: %s\nTransit Time: %s\nCost=%d \n\n",b.number,b.to,b.from,b.date,b.time,b.transit,b.ttime,b.cost);
+            printf("Record insert Successful");
+        }
+        printf("\n");
+        fclose(fp);
+}
+void find()
+{
+    struct book b;
+    FILE *fp;
+    char st[20];
+
+    char ch[20];
+    printf("Enter the Flight Number :");
+    scanf("%s",ch);
+    //system("clear");
+    fp=fopen("data.text","r+");
+     if(fp==NULL)
+     {
+         printf("File Not Found !\n");
+         exit(1);
+     }
+     else
+     {
+         while(!feof(fp))
+         {
+             fscanf(fp,"%s %s %s %s %s %s %s %d ",b.number,b.to,b.from,b.date,b.time,b.transit,b.ttime,b.cost);
+             strcpy(st,b.number);
+             if(strcmp(st,ch) == 0)
+             {
+                 //fscanf(fp,"%s %s %s %d",b.code,b.name,b.date,&b.cost);//
+                 printf("\n Record Found\n");
+                 printf("\n\t\tFlight Number ::%s,b.number");
+                 printf("\n\t\tTo ::%s",b.to);
+                 printf("\n\t\tFrom ::%s",b.from);
+                 printf("\n\t\tFlight date ::%s",b.date);
+                 printf("\n\t\tFlight time ::%s",b.time);
+                 printf("\n\t\tTransit ::%s",b.transit);
+                 printf("\n\t\tTransit time ::%s",b.ttime);
+                 printf("\n\t\tPrice of ticket ::%d",b.cost);
+             }
+         }
+
+     }
+     fclose(fp);
+
+}
+void viewAll()
+{
+    char ch;
+    FILE *fp;
+
+    fp=fopen("data.text","r");
+     if(fp==NULL)
+    {
+        printf("File Not Found !");
+        exit(1);
+    }
+    else
+    {
+        //system("clear");
+        while( (ch=fgetc(fp) ) !=EOF )
+            printf("%c",ch);
+    }
+     fclose(fp);
+
+}
+void book_ticket()
+{
+    struct book b;
+    FILE *fp;
+
+    FILE *ufp;
+
+    int total_amount;
+    char name[20];
+    char ch; //used display all buses
+    char bus_code[20]; //for searching
+
+    //display all buses by default for bus code
+        fp=fopen("data.text","r");
+     if(fp==NULL)
+    {
+        printf("File not found !");
+        exit(1);
+    }
+    else
+    {
+        //system("clear");
+        while( ( ch = fgetc(fp) ) !=EOF )
+            printf("%c",ch);
+    }
+    fclose(fp);
+
+    //display end
+    printf("\n For booking ticket Enter flight number::)");
+    scanf("%s",bus_code);
+    //system ("clear");
+         fp=fopen("data.text","r");
+     if(fp==NULL)
+    {
+        printf("File not found !");
+        exit(1);
+    }
+    else
+    {
+      while(fscanf(fp,"%s %s %s %s %s %s %s %d",b.number,b.to,b.from,b.date,b.time,b.transit,b.ttime,&b.cost)!= EOF)
+        {
+            if(strcmp(b.number,bus_code) == 0)
+            {
+                 //printf("%s /%s /%s /%d",b.code,b.name,b.date,b.cost);//
+                printf("\n Record Found\n");
+                 printf("\n\t\tFlight Number ::%s",b.number);
+                 printf("\n\t\tTo ::%s",b.to);
+                 printf("\n\t\tFrom ::%s",b.from);
+                 printf("\n\t\tFlight date ::%s",b.date);
+                 printf("\n\t\tFlight time ::%s",b.time);
+                 printf("\n\t\tTransit ::%s",b.transit);
+                 printf("\n\t\tTransit time ::%s",b.ttime);
+                 printf("\n\t\tPrice of ticket ::%d",b.cost);
+        }
+    }
+
+
+}
+
+printf("\n Enter Your Name :");
+ scanf("%s",name);
+ printf("\n Enter Mobile Number :");
+ scanf("%s",b.mobile);
+ printf("\n Enter Passport Number :");
+ scanf("%d",b.pass);
+ printf("\n\n ENJOY Your Journey \n");
+ printf("\n\t\tName : %s",name);
+ printf("\n\t\tMobile Number : %s",b.mobile);
+ printf("\n\t\tFlight Number : %s",b.number);
+ printf("\n\t\tTo ::%s",b.to);
+ printf("\n\t\tFrom ::%s",b.from);
+ printf("\n\t\tFlight Time: %s",b.time);
+ printf("\n\t\tPassport Number: %s",b.pass);
+ printf("\n\t\tTotal Amount : %d",&b.cost);
+
+
+
+
+ufp=fopen("oldTransection.text","a");
+if(ufp==NULL)
+{
+    printf("File not found");
+}
+else
+{
+    fprintf(ufp,"Name: %s\nMobile Number: %d\nTo: %s\nFrom: %s\nTime: %s\nDeparture Time: %s\nPassport Number %s\nTotal Amount %d\n \n",name,b.mobile,b.number,b.to,b.from,b.time,b.pass,b.cost);
+    printf("\n Record insert successfully to the old record file");
+}
+printf("\n");
+fclose(ufp);
+fclose(fp);
+}
+void old_record()
+{
+    char ch;
+    FILE *fp;
+    //system("clear");
+    fp=fopen("oldTransaction.text","r");
+    if(fp==NULL)
+    {
+        printf("File not found !");
+        exit(1);
+    }
+    else
+    {
+        //system("clear");
+         while( ( ch = fgetc(fp) ) !=EOF )
+            printf("%c",ch);
+    }
+    fclose(fp);
+
+
+}
